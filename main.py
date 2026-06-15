@@ -9,15 +9,23 @@ from dotenv import load_dotenv
 import uuid
 from langchain_core.messages import AIMessageChunk
 from pathlib import Path
-
+from langchain.agents.middleware import SummarizationMiddleware
 
 
 load_dotenv()
-os.environ['GROQ_API_KEY']=os.getenv('GROQ_API_KEY')
+api_key_local=os.getenv('GROQ_API_KEY')
 
 import streamlit as st
 
-llm=ChatGroq(model='qwen/qwen3-32b',streaming=True)
+api_prod=st.sidebar.text_input(type='password',label='Enter your groq api key')
+
+if api_prod:
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_prod)
+    summarization_llm=ChatGroq(model='meta-llama/llama-4-scout-17b-16e-instruct',api_key=api_prod)
+else:
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_key_local)
+    summarization_llm=ChatGroq(model='meta-llama/llama-4-scout-17b-16e-instruct',api_key=api_key_local)
+
 
 def connect_db(uri, llm):
     try:
@@ -154,10 +162,17 @@ inspect sample values if necessary.
         top_k=5,
     )
 
+   
+
     agent=create_agent(
             model=llm,
             tools=db_tools,
             system_prompt=generate_query_system_prompt,
+            middleware=[ SummarizationMiddleware(
+            model=summarization_llm,
+            trigger=('messages',10), #when length of messages reached 10,
+            keep=('messages',4) # do not summarize recent top 4
+        )],
             checkpointer=st.session_state.memory,
 
         )
