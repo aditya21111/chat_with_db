@@ -121,7 +121,8 @@ else:
 
     You can order the results by a relevant column to return the most interesting
     examples in the database. Never query for all the columns from a specific table,
-    only ask for the relevant columns given the question.
+    only ask for the relevant columns given the question.Always inspect table schemas before writing a query.
+Never assume column meanings.
 
     DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
 
@@ -129,12 +130,13 @@ else:
 format it as a markdown table
 
     When reporting query results:
-
 - Use ONLY values returned by the database.
 - Never estimate, infer, interpolate, or invent values.
-- If information is not present in query results, say so.
+- If information is not present in query results, say exactly not available.
 - Copy database values exactly and give it exactly change nothing in values.
 - Do not round, modify, or complete missing data.
+
+
 
 .
     """.format(
