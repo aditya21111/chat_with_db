@@ -136,6 +136,16 @@ format it as a markdown table
 - Copy database values exactly and give it exactly change nothing in values.
 - Do not round, modify, or complete missing data.
 
+When filtering text values:
+
+- Perform case-insensitive matching.
+- Do not assume capitalization.
+- Use LOWER(column) = LOWER(value) when supported.
+
+Before filtering on location fields
+(district, state, city, region),
+inspect sample values if necessary.
+
 
 
 .
