@@ -165,7 +165,7 @@ propcache==0.5.2
     #   yarl
 protobuf==7.35.1
     # via streamlit
-psycopg2==2.9.12
+
     # via chat-with-db
 psycopg2-binary==2.9.12
     # via chat-with-db
