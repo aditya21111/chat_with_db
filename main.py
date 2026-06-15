@@ -170,7 +170,7 @@ inspect sample values if necessary.
             system_prompt=generate_query_system_prompt,
             middleware=[ SummarizationMiddleware(
             model=summarization_llm,
-            trigger=('messages',10), #when length of messages reached 10,
+            trigger=('messages',7), #when length of messages reached 10,
             keep=('messages',4) # do not summarize recent top 4
         )],
             checkpointer=st.session_state.memory,
