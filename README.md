@@ -12,7 +12,7 @@ An AI-powered Streamlit application that lets you **chat with any SQL database**
   - 📤 Upload a `.db` / `.sqlite` / `.sqlite3` file directly
   - 📚 Use the bundled sample **Books** database (credit: [sample-db.net](https://sample-db.net))
 - **Streaming Responses** — See the AI's answer appear token-by-token in real time.
-- **Conversation Memory** — Follow-up questions maintain context within a session, with automatic summarization of older messages to stay within context limits.
+- **Stateless Context Memory** — Follow-up questions maintain context using a highly optimized sliding window approach. Heavy tool outputs and database schemas are instantly purged between turns to strictly adhere to Groq's 6,000 TPM free-tier limits, ensuring maximum reasoning capacity without `RateLimitError`s.
 - **Bring Your Own Key** — Optionally enter your own Groq API key from the sidebar.
 - **Read-Only Safety** — The agent is instructed never to run DML statements (`INSERT`, `UPDATE`, `DELETE`, `DROP`).
 - **Auto-Formatted Output** — Results with more than 3 records are returned as markdown tables.
