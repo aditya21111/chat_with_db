@@ -171,13 +171,6 @@ Output:
             model=llm,
             tools=db_tools,
             system_prompt=generate_query_system_prompt,
-            middleware=[ SummarizationMiddleware(
-            model=summarization_llm,
-            trigger=('messages',10), #when length of messages reached 10,
-            keep=('messages',4) # do not summarize recent top 4
-        )],
-            checkpointer=st.session_state.memory,
-
         )
     prompt=st.chat_input(placeholder='What you want to know from your db')
     if prompt:
@@ -188,14 +181,16 @@ Output:
             placeholder = st.empty()
             final_response = ""
 
+            clean_history = []
+            # Keep only the last 6 messages to prevent context bloat (3 conversational turns)
+            recent_messages = st.session_state.messages[-6:]
+            for msg in recent_messages:
+                role = "user" if msg["role"] == "human" else "assistant"
+                clean_history.append((role, msg["content"]))
+
             for chunk, metadata in agent.stream(
                 {
-                    "messages": [("user", prompt)]
-                },
-                config={
-                    "configurable": {
-                        "thread_id": st.session_state.thread_id
-                    }
+                    "messages": clean_history
                 },
                 stream_mode="messages"
             ):
