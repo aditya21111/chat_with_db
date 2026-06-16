@@ -1,6 +1,6 @@
 # 💬 Chat with DB
 
-An AI-powered Streamlit application that lets you **chat with any SQL database** using natural language. Built with LangChain, LangGraph, and Groq (Qwen3-32B), the app converts your questions into SQL queries and returns human-readable answers — with streaming responses and conversation memory.
+An AI-powered Streamlit application that lets you **chat with any SQL database** using natural language. Built with LangChain, LangGraph, and Groq (DeepSeek-R1-Distill-Llama-70B), the app converts your questions into SQL queries and returns human-readable answers — with streaming responses and conversation memory.
 
 ---
 
@@ -12,7 +12,8 @@ An AI-powered Streamlit application that lets you **chat with any SQL database**
   - 📤 Upload a `.db` / `.sqlite` / `.sqlite3` file directly
   - 📚 Use the bundled sample **Books** database (credit: [sample-db.net](https://sample-db.net))
 - **Streaming Responses** — See the AI's answer appear token-by-token in real time.
-- **Conversation Memory** — Follow-up questions maintain context within a session.
+- **Conversation Memory** — Follow-up questions maintain context within a session, with automatic summarization of older messages to stay within context limits.
+- **Bring Your Own Key** — Optionally enter your own Groq API key from the sidebar.
 - **Read-Only Safety** — The agent is instructed never to run DML statements (`INSERT`, `UPDATE`, `DELETE`, `DROP`).
 - **Auto-Formatted Output** — Results with more than 3 records are returned as markdown tables.
 
@@ -35,7 +36,7 @@ chat_with_db/
 
 | Layer        | Technology                          |
 | ------------ | ----------------------------------- |
-| LLM          | Groq — `qwen/qwen3-32b`            |
+| LLM          | Groq — `deepseek-r1-distill-llama-70b` |
 | Framework    | LangChain + LangGraph               |
 | SQL Toolkit  | LangChain `SQLDatabaseToolkit`       |
 | UI           | Streamlit                            |
@@ -47,7 +48,7 @@ chat_with_db/
 
 ### Prerequisites
 
-- Python **3.11+**
+- Python **3.13+**
 - A [Groq API key](https://console.groq.com/)
 - *(Optional)* A [LangChain API key](https://smith.langchain.com/) for tracing
 
