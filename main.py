@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 import uuid
 from langchain_core.messages import AIMessageChunk
 from pathlib import Path
-from langchain.agents.middleware import SummarizationMiddleware
+
 
 
 load_dotenv()
@@ -21,10 +21,10 @@ api_prod=st.sidebar.text_input(type='password',label='Enter your groq api key')
 
 if api_prod:
     llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_prod,temperature=0.6,top_p=0.95,reasoning_format='hidden')
-    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_prod)
+ 
 else:
     llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_key_local,temperature=0.6,top_p=0.95,reasoning_format='hidden')
-    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_key_local)
+
 
 
 def connect_db(uri, llm):
@@ -48,8 +48,7 @@ if 'messages' not in st.session_state:
 if 'thread_id' not in st.session_state:
     st.session_state['thread_id']=str(uuid.uuid4())
 
-if "memory" not in st.session_state:
-    st.session_state.memory = InMemorySaver()
+
 
 if 'current_db' not in st.session_state:
     st.session_state.current_db=None
@@ -122,7 +121,6 @@ else:
     if st.session_state.current_db!=new_db:
         st.session_state.current_db=new_db
         st.session_state['thread_id']=str(uuid.uuid4())
-        st.session_state.memory = InMemorySaver()
         st.session_state.messages = [
     {
         'role': 'assistant',
