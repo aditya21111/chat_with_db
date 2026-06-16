@@ -20,11 +20,11 @@ import streamlit as st
 api_prod=st.sidebar.text_input(type='password',label='Enter your groq api key')
 
 if api_prod:
-    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_prod,temperature=0.6,top_p=0.95,reasoning_format='hidden',max_tokens=2560)
-    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_prod,max_tokens=2560)
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_prod,temperature=0.6,top_p=0.95,reasoning_format='hidden')
+    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_prod)
 else:
-    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_key_local,temperature=0.6,top_p=0.95,reasoning_format='hidden',max_tokens=2560)
-    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_key_local,max_tokens=2560)
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_key_local,temperature=0.6,top_p=0.95,reasoning_format='hidden')
+    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_key_local)
 
 
 def connect_db(uri, llm):
@@ -200,12 +200,12 @@ Output:
                 stream_mode="messages"
             ):
 
-                # Filter out summarization node and only stream the actual agent's chunks
-                if isinstance(chunk, AIMessageChunk) and metadata.get("langgraph_node") == "agent":
-                    # Some chunks might be empty or just tool calls
+                if isinstance(chunk, AIMessageChunk):
+                    # Filter out empty chunks and the summarization middleware leaks
                     if isinstance(chunk.content, str) and chunk.content:
-                        final_response += chunk.content
-                        placeholder.markdown(final_response + "▌")
+                        if "## SESSION INTENT" not in chunk.content and "SUMMARY" not in chunk.content:
+                            final_response += chunk.content
+                            placeholder.markdown(final_response + "▌")
                             
             placeholder.markdown(final_response)
 
