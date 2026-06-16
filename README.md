@@ -1,6 +1,6 @@
 # 💬 Chat with DB
 
-An AI-powered Streamlit application that lets you **chat with any SQL database** using natural language. Built with LangChain, LangGraph, and Groq (Llama 3.3 70B), the app converts your questions into SQL queries and returns human-readable answers — with streaming responses and conversation memory.
+An AI-powered Streamlit application that lets you **chat with any SQL database** using natural language. Built with LangChain, LangGraph, and Groq (Qwen3-32B), the app converts your questions into SQL queries and returns human-readable answers — with streaming responses and conversation memory.
 
 ---
 
@@ -36,7 +36,7 @@ chat_with_db/
 
 | Layer        | Technology                          |
 | ------------ | ----------------------------------- |
-| LLM          | Groq — `llama-3.3-70b-versatile`       |
+| LLM          | Groq — `qwen/qwen3-32b`                |
 | Framework    | LangChain + LangGraph               |
 | SQL Toolkit  | LangChain `SQLDatabaseToolkit`       |
 | UI           | Streamlit                            |

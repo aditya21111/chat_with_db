@@ -20,10 +20,10 @@ import streamlit as st
 api_prod=st.sidebar.text_input(type='password',label='Enter your groq api key')
 
 if api_prod:
-    llm=ChatGroq(model='llama-3.3-70b-versatile',streaming=True,api_key=api_prod)
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_prod,temperature=0.6,top_p=0.95,reasoning_effort='none')
     summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_prod)
 else:
-    llm=ChatGroq(model='llama-3.3-70b-versatile',streaming=True,api_key=api_key_local)
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_key_local,temperature=0.6,top_p=0.95,reasoning_effort='none')
     summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_key_local)
 
 
