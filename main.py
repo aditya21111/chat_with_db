@@ -137,18 +137,18 @@ else:
 For EVERY question, you MUST do these steps in order:
 1. Call `sql_db_list_tables` to list tables.
 2. Call `sql_db_schema` on relevant tables to get exact column names and types.
-3. For any text/string column you need to filter on, FIRST run: `SELECT DISTINCT column_name FROM table_name LIMIT 20` to see what values actually exist in the database. Use the exact values you find.
+3. For any text/string column you need to filter on, FIRST run a broad search to find exact values, e.g., `SELECT DISTINCT column_name FROM table_name WHERE LOWER(column_name) LIKE '%partial_value%' LIMIT 10`. Use the exact values you find.
 4. Write your query, then call `sql_db_query_checker` to validate it.
 5. Call `sql_db_query` to execute.
 
 Text filtering rules (MUST follow):
 - NEVER use `=` for text columns. ALWAYS use `LOWER(column) LIKE '%value%'` for text matching.
-- Never assume how values are stored. Always run the DISTINCT query in step 3 first.
+- Never assume how values are stored. Always sample actual values first as described in step 3.
 
 If you get 0 results:
 - Do NOT say "not found" immediately.
-- Run `SELECT DISTINCT column_name FROM table_name LIMIT 20` on the column you filtered, and show the user what values exist.
-- Try a broader match with `LIKE '%partial%'` and retry.
+- Run a broader search, e.g., `SELECT DISTINCT column_name FROM table_name WHERE LOWER(column_name) LIKE '%partial_value%' LIMIT 10` on the column you filtered, and show the user what values exist.
+- Try exploring related columns or using even broader matches and retry.
 - Only say "not found" after you have verified and shown the actual values in the column.
 
 Query rules:
