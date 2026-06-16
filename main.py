@@ -20,11 +20,11 @@ import streamlit as st
 api_prod=st.sidebar.text_input(type='password',label='Enter your groq api key')
 
 if api_prod:
-    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_prod,temperature=0.6,top_p=0.95,reasoning_format='hidden')
-    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_prod)
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_prod,temperature=0.6,top_p=0.95,reasoning_format='hidden',max_tokens=1024)
+    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_prod,max_tokens=1024)
 else:
-    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_key_local,temperature=0.6,top_p=0.95,reasoning_format='hidden')
-    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_key_local)
+    llm=ChatGroq(model='qwen/qwen3-32b',streaming=True,api_key=api_key_local,temperature=0.6,top_p=0.95,reasoning_format='hidden',max_tokens=1024)
+    summarization_llm=ChatGroq(model='llama-3.3-70b-versatile',api_key=api_key_local,max_tokens=1024)
 
 
 def connect_db(uri, llm):
@@ -173,7 +173,7 @@ Output:
             system_prompt=generate_query_system_prompt,
             middleware=[ SummarizationMiddleware(
             model=summarization_llm,
-            trigger=('messages',20), #when length of messages reached 10,
+            trigger=('messages',10), #when length of messages reached 10,
             keep=('messages',4) # do not summarize recent top 4
         )],
             checkpointer=st.session_state.memory,
