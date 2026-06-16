@@ -70,16 +70,28 @@ if radio_opt.index(selected_opt)==1:
     uploaded_file=st.sidebar.file_uploader(label='upload .db or .sqlite file',accept_multiple_files=False,type=["db", "sqlite", "sqlite3"])
 
     if uploaded_file is not None:
-        # 2. Save the uploaded file to a temporary location
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".db") as tmp_file:
-            tmp_file.write(uploaded_file.getvalue())
-            tmp_db_path = tmp_file.name
-            sqlite_uri = f"sqlite:///{tmp_file.name}"
-            new_db=sqlite_uri
-            db_tools,dialect=connect_db(sqlite_uri,llm)
+        # Identify the uploaded file by name + size to detect new uploads
+        file_identity = f"{uploaded_file.name}_{uploaded_file.size}"
+
+        # Only create a new temp file if this is a different upload
+        if st.session_state.get('uploaded_file_id') != file_identity:
+            # Clean up previous temp file if it exists
+            prev_path = st.session_state.get('uploaded_tmp_path')
+            if prev_path and os.path.exists(prev_path):
+                os.unlink(prev_path)
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".db") as tmp_file:
+                tmp_file.write(uploaded_file.getvalue())
+                st.session_state['uploaded_tmp_path'] = tmp_file.name
+                st.session_state['uploaded_file_id'] = file_identity
+
+        # Reuse the cached temp file path on every rerun
+        sqlite_uri = f"sqlite:///{st.session_state['uploaded_tmp_path']}"
+        new_db=sqlite_uri
+        db_tools,dialect=connect_db(sqlite_uri,llm)
 
     else:
-        st.error('Please upload correct db file')
+        st.info('Please upload a .db or .sqlite file to get started.')
 
 elif radio_opt.index(selected_opt)==0:
     url=st.sidebar.text_input(label='enter the url to connect to the db (locally or hosted)')
